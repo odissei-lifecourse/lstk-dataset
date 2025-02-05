@@ -1,0 +1,99 @@
+db:
+    path: /mnt/ssd/AcademicGraph/AcademicGraph.sqlite
+    views:
+        authors: |
+            CREATE TEMP VIEW v_authors AS
+            SELECT AuthorId, YearFirstPub, YearLastPub, FirstName, ProbabilityFemale
+            FROM author_sample
+            INNER JOIN author_fields
+            USING(AuthorId)
+            INNER JOIN (
+              SELECT FieldOfStudyId
+              FROM FieldsOfStudy
+              WHERE level=0 and NormalizedName='computer science'
+            ) AS fields
+            ON (author_fields.FieldOfStudyId=fields.FieldOfStudyId)
+            INNER JOIN (
+                SELECT AuthorId, ProbabilityFemale
+                FROM author_gender
+            ) USING (AuthorId)
+        papers: |
+            CREATE TEMP VIEW v_papers AS
+            SELECT PaperId, AuthorId, DocType, PaperTitle, Year, Date, AuthorCount, CitationCount_y10
+                , CASE JournalId 
+                    WHEN "" 
+                        THEN NULL
+                    ELSE JournalId
+                END JournalId
+                , CASE ConferenceSeriesId
+                    WHEN ""
+                        THEN NULL
+                    ELSE ConferenceSeriesId
+                END ConferenceSeriesId
+            FROM PaperAuthorUnique
+            INNER JOIN v_authors
+            USING(AuthorId)
+            INNER JOIN (
+                    SELECT PaperId, DocType, PaperTitle, Year, Date, JournalId, ConferenceSeriesId
+                   FROM Papers
+            ) USING(PaperId)
+            INNER JOIN paper_outcomes
+            USING (PaperId)
+            WHERE Year >= 1985 AND Year <= 2015
+        affiliations: |
+            CREATE TEMP VIEW v_affiliations AS
+            SELECT AuthorId, AffiliationId, Year, Iso3166Code, Latitude, Longitude
+            FROM AuthorAffiliation
+            INNER JOIN (
+                SELECT AuthorId
+                FROM v_authors
+            ) USING (AuthorId)
+            INNER JOIN (
+                SELECT AffiliationId, Iso3166Code
+                , CASE Latitude
+                    WHEN ""
+                        THEN NULL
+                    ELSE Latitude
+                END Latitude
+                , CASE Longitude
+                    WHEN ""
+                        THEN NULL
+                    ELSE Longitude
+                END Longitude
+                FROM Affiliations
+            ) USING (AffiliationId)
+            WHERE Year >= 1985 AND Year <= 2015
+        collab: |
+            CREATE TEMP VIEW v_collab AS
+            SELECT AuthorId, CoAuthorId, Year
+            FROM author_collab
+            INNER JOIN v_authors
+            USING(AuthorId)
+            WHERE Year >= 1985 AND Year <= 2015
+        citing: |
+            CREATE TEMP VIEW v_citing AS
+            SELECT v_papers.AuthorId, v_papers.Year, CitedAuthorId
+            FROM v_papers
+            INNER JOIN (
+                SELECT a.PaperId, CitedAuthorId
+                FROM PaperReferences AS a
+                INNER JOIN (
+                    SELECT PaperId, AuthorId AS CitedAuthorId
+                    FROM PaperAuthorUnique
+                ) AS b ON (a.PaperReferenceId=b.PaperId)
+            ) USING(PaperId)
+output:
+    path: data/
+    extension: .parquet
+    schema:
+        papers:
+            PaperId: int64
+            AuthorId: int64
+            DocType: string
+            PaperTitle: string
+            Date: string
+            JournalId: int64
+            ConferenceSeriesId: int64
+            AuthorCount: int64
+            CitationCount_y10: int64
+            
