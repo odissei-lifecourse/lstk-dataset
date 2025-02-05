@@ -9,11 +9,11 @@
 Once `uv` is installed: using through the [pip interface](https://docs.astral.sh/uv/pip/)
 
 ```bash
-uv venv 
+uv venv
 source .venv/bin/activate
 uv pip sync pyproject.toml
 
-# add dependencies with 
+# add dependencies with
 uv add pandas
 ```
 
