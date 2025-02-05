@@ -1,29 +1,28 @@
 import sqlite3 as sqlite
+from pathlib import Path
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-from tqdm import tqdm
-from pathlib import Path
 from omegaconf import OmegaConf
-
+from tqdm import tqdm
 
 
 def db_to_file(con, sql_source, destination, chunksize=10_000, schema=None, view_prefix="v_"):
     pqwriter = None
     if schema is not None:
         schema = pa.schema(schema)
-    for i, chunk in tqdm(enumerate(pd.read_sql(f"select * from {view_prefix}{sql_source}", con, chunksize=chunksize)), 
+    for i, chunk in tqdm(enumerate(pd.read_sql(f"select * from {view_prefix}{sql_source}", con, chunksize=chunksize)),
                       desc=f"Processing {sql_source}"
                      ):
         table = pa.Table.from_pandas(chunk, schema=schema)
-        
+
         if i == 0:
-            pqwriter = pq.ParquetWriter(destination, table.schema)  
-            
+            pqwriter = pq.ParquetWriter(destination, table.schema)
+
         pqwriter.write_table(table)
         if i > 5:
             break
-    
+
     # close the parquet writer
     if pqwriter:
         pqwriter.close()
@@ -31,7 +30,7 @@ def db_to_file(con, sql_source, destination, chunksize=10_000, schema=None, view
 
 
 def main():
-    config = OmegaConf.load('config.yaml')
+    config = OmegaConf.load("config.yaml")
     con = sqlite.connect(config.db.path)
     for query in config.db.views.values():
         con.execute(query)
