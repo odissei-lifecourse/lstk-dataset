@@ -7,17 +7,6 @@ from pathlib import Path
 from omegaconf import OmegaConf
 
 
-config = OmegaConf.load('config.yaml')
-
-
-con = sqlite.connect(config.db.path)
-
-
-
-for name, query in config.db.views.items():
-    con.execute(query)
-
-
 
 def db_to_file(con, sql_source, destination, chunksize=10_000, schema=None, view_prefix="v_"):
     pqwriter = None
@@ -41,18 +30,32 @@ def db_to_file(con, sql_source, destination, chunksize=10_000, schema=None, view
 
 
 
+def main():
+    config = OmegaConf.load('config.yaml')
+    con = sqlite.connect(config.db.path)
+    for query in config.db.views.values():
+        con.execute(query)
 
-for sql_source in config.db.views.keys():
-    print(sql_source)
-    outfile = Path(config.output.path) / sql_source
-    outfile = outfile.with_suffix(config.output.extension)
-    schema = None
-    if sql_source in schema_dict:
-        schema = [(k,v) for k,v in schema_dict[sql_source].items()]
-    db_to_file(con, sql_source, outfile, schema=schema)
+    schema_dict = config.output.schema
+    for sql_source in config.db.views.keys():
+        print(sql_source)
+        outfile = Path(config.output.path) / sql_source
+        outfile = outfile.with_suffix(config.output.extension)
+        schema = None
+        if sql_source in schema_dict:
+            schema = [(k,v) for k,v in schema_dict[sql_source].items()]
+        db_to_file(con, sql_source, outfile, schema=schema)
 
 
-con.close()
+    con.close()
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
 
 
 
