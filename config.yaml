@@ -20,8 +20,8 @@ db:
         papers: |
             CREATE TEMP VIEW v_papers AS
             SELECT PaperId, AuthorId, DocType, PaperTitle, Year, Date, AuthorCount, CitationCount_y10
-                , CASE JournalId 
-                    WHEN "" 
+                , CASE JournalId
+                    WHEN ""
                         THEN NULL
                     ELSE JournalId
                 END JournalId
@@ -96,4 +96,10 @@ output:
             ConferenceSeriesId: int64
             AuthorCount: int64
             CitationCount_y10: int64
-            
+        affiliations:
+            AuthorId: int64
+            AffiliationId: int64
+            Year: int64
+            Iso3166Code: string
+            Latitude: float64
+            Longitude: float64
