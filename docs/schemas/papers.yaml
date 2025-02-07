@@ -1,9 +1,0 @@
-AuthorCount: int64
-AuthorId: int64
-CitationCount_y10: int64
-ConferenceSeriesId: int64
-Date: string
-DocType: string
-JournalId: int64
-PaperId: int64
-PaperTitle: string

@@ -111,5 +111,5 @@ aggregate:
             , CitedAuthorId
     suffix: _aggregated
 export:
-    meta_path: docs/schemas/
+    docs_path: docs
     replace_suffix: [citing]

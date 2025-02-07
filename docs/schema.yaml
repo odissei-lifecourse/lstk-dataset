@@ -1,0 +1,31 @@
+affiliations:
+  AffiliationId: int64
+  AuthorId: int64
+  Iso3166Code: string
+  Latitude: double
+  Longitude: double
+  Year: int64
+authors:
+  AuthorId: int64
+  FirstName: string
+  ProbabilityFemale: double
+  YearFirstPub: int64
+  YearLastPub: int64
+citing:
+  AuthorId: int64
+  CitedAuthorId: int64
+  Year: int64
+collab:
+  AuthorId: int64
+  CoAuthorId: int64
+  Year: int64
+papers:
+  AuthorCount: int64
+  AuthorId: int64
+  CitationCount_y10: int64
+  ConferenceSeriesId: int64
+  Date: string
+  DocType: string
+  JournalId: int64
+  PaperId: int64
+  PaperTitle: string
