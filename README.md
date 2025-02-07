@@ -32,14 +32,14 @@ uv add pandas
 - I don't fully understand how uv interacts with pyenv, and there may be conflicts.
 
 
-### Creating tables
+### Pipeline
 
 ```bash
 source .venv/bin/activate
 uv run make_dataset.py
 uv run aggregate.py
+uv run get_metadata.py
 ```
-
 
 
 ## Citation
