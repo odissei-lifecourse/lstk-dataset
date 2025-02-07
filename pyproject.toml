@@ -25,7 +25,8 @@ dependencies = [
 line-length = 120
 output-format = "concise"
 exclude = [
-    "*make_dataset.ipynb"
+    "*make_dataset.ipynb",
+    "*aggregate.ipynb"
 ]
 
 [tool.ruff.lint]

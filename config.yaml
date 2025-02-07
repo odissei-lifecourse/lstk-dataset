@@ -103,3 +103,10 @@ output:
             Iso3166Code: string
             Latitude: float64
             Longitude: float64
+aggregate:
+    tables:
+        citing: |
+            SELECT DISTINCT AuthorId
+            , Year
+            , CitedAuthorId
+    suffix: _aggregated
