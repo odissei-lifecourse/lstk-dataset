@@ -112,4 +112,4 @@ aggregate:
     suffix: _aggregated
 export:
     meta_path: docs/schemas/
-    exclude: [citing.parquet]
+    replace_suffix: [citing]
