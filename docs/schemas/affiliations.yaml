@@ -1,0 +1,6 @@
+AffiliationId: int64
+AuthorId: int64
+Iso3166Code: string
+Latitude: double
+Longitude: double
+Year: int64

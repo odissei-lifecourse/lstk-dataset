@@ -1,0 +1,5 @@
+AuthorId: int64
+FirstName: string
+ProbabilityFemale: double
+YearFirstPub: int64
+YearLastPub: int64
