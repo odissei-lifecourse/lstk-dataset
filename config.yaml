@@ -82,6 +82,10 @@ db:
                     FROM PaperAuthorUnique
                 ) AS b ON (a.PaperReferenceId=b.PaperId)
             ) USING(PaperId)
+            INNER JOIN (
+              SELECT AuthorId
+              FROM v_authors
+            ) USING(AuthorId)
 output:
     path: data/
     extension: .parquet

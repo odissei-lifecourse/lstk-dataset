@@ -31,14 +31,10 @@ uv add pandas
 - To open notebooks, run `uv run jupyter-lab --no-browser`
 - I don't fully understand how uv interacts with pyenv, and there may be conflicts.
 
-
-### Pipeline
+To run the pipeline, run
 
 ```bash
-source .venv/bin/activate
-uv run make_dataset.py
-uv run aggregate.py
-uv run get_metadata.py
+bash pipeline.sh
 ```
 
 
