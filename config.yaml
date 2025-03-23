@@ -89,6 +89,9 @@ db:
 output:
     path: data/
     extension: .parquet
+    suffix:
+        aggregate: _aggregated
+        postprocess: _post
     schema:
         papers:
             PaperId: int64
@@ -113,7 +116,41 @@ aggregate:
             SELECT DISTINCT AuthorId
             , Year
             , CitedAuthorId
-    suffix: _aggregated
+postprocess:
+    add_first_affiliation:
+      inputs:
+        authors_ds: authors
+        affiliations_ds: affiliations
+      reference_table: authors
+      query: |
+        WITH ranked_duplicates AS (
+            SELECT
+                *,
+                ROW_NUMBER() OVER (
+                    PARTITION BY AuthorId, Year
+                    ORDER BY random()
+                ) as row_num
+            FROM affiliations_ds
+        )
+        SELECT *
+        FROM authors_ds
+        LEFT JOIN (
+            SELECT affiliations.AuthorId,
+            Iso3166Code as Iso3166Code_FirstAffiliation
+            FROM ranked_duplicates AS affiliations
+            INNER JOIN (
+              SELECT AuthorId,
+              MIN(Year) AS first_affiliation_year
+              FROM ranked_duplicates
+              GROUP BY AuthorId
+            ) as b
+            ON (affiliations.authorid=b.authorid
+                and affiliations.year=b.first_affiliation_year
+            )
+            WHERE row_num = 1
+        )
+        USING (AuthorId)
 export:
     docs_path: docs
-    replace_suffix: [citing]
+    final_data: output
+    replace_suffix: [citing, authors]

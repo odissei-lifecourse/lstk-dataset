@@ -1,2 +1,6 @@
 2025-02-07 18:22:45,952 - __main__ - INFO - Processing authors
 2025-02-07 18:22:58,706 - __main__ - INFO - Processing papers
+2025-02-07 19:07:37,926 - __main__ - INFO - Processing affiliations
+2025-02-07 19:09:49,191 - __main__ - INFO - Processing collab
+2025-02-07 19:11:43,463 - __main__ - INFO - Processing citing
+2025-02-07 20:13:46,688 - __main__ - INFO - Finished.

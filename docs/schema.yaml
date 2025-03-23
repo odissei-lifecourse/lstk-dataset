@@ -8,6 +8,7 @@ affiliations:
 authors:
   AuthorId: int64
   FirstName: string
+  Iso3166Code_FirstAffiliation: string
   ProbabilityFemale: double
   YearFirstPub: int64
   YearLastPub: int64
