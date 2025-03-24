@@ -65,8 +65,13 @@ def postprocess(task_config: DictConfig, output_config: DictConfig, chunk_size: 
     output_name = Path(f"{task_config.reference_table}{output_config.suffix.postprocess}")
     destination = (output_config.path / output_name).with_suffix(output_config.extension)
     with duckdb.connect() as con:
+        # set seed: https://duckdb.org/docs/stable/sql/samples.html#syntax
+        con.execute("SET threads=1")
+        con.execute("SELECT setseed(0.23)")
+        # register arrow datasets
         for tbl_name, tbl in data_dict.items():
             con.register(tbl_name, tbl)
+        # process
         arrow_stream = con.execute(task_config.query).fetch_record_batch(rows_per_batch=chunk_size)
         write_batches(arrow_stream, destination)
 
