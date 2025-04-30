@@ -4,3 +4,15 @@
 2025-02-07 19:09:49,191 - __main__ - INFO - Processing collab
 2025-02-07 19:11:43,463 - __main__ - INFO - Processing citing
 2025-02-07 20:13:46,688 - __main__ - INFO - Finished.
+2025-03-23 21:12:54,259 - __main__ - INFO - Processing authors
+2025-03-23 21:13:18,475 - __main__ - INFO - Processing papers
+2025-03-23 23:52:59,596 - __main__ - INFO - Processing affiliations
+2025-03-23 23:56:53,679 - __main__ - INFO - Processing collab
+2025-03-23 23:59:31,787 - __main__ - INFO - Processing citing
+2025-03-24 02:41:28,682 - __main__ - INFO - Finished.
+2025-03-24 21:25:16,949 - __main__ - INFO - Processing authors
+2025-03-24 21:25:39,080 - __main__ - INFO - Processing papers
+2025-03-24 23:12:28,260 - __main__ - INFO - Processing affiliations
+2025-03-24 23:16:39,884 - __main__ - INFO - Processing collab
+2025-03-24 23:19:22,519 - __main__ - INFO - Processing citing
+2025-03-25 01:52:32,096 - __main__ - INFO - Finished.
